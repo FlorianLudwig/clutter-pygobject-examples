@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
-import cairo
+import sys
 import math
 import time
 
+import cairo
 from gi.repository import Clutter
 
 SIZE_WIDTH, SIZE_HEIGHT = 300, 300
@@ -62,7 +63,9 @@ def invalidate_clock(canvas):
 
     return True
 
+
 if __name__ == "__main__":
+    Clutter.init(sys.argv)
     # The stage is the "window", its where our actors play.
     stage = Clutter.Stage()
 
@@ -70,7 +73,7 @@ if __name__ == "__main__":
     stage.set_color(Clutter.Color.get_static(Clutter.StaticColor.SKY_BLUE_LIGHT))
     stage.set_user_resizable(True)
     stage.set_size(SIZE_WIDTH, SIZE_HEIGHT)
-    stage.connect("destroy", Clutter.main_quit)
+    stage.connect("destroy", lambda w: Clutter.main_quit())
     stage.show()
 
     # This is one way of setting up a constraint manually; we could also use
@@ -84,7 +87,7 @@ if __name__ == "__main__":
     # This is our Cairo drawing texture. We will eventually be passed a 
     # rendering context for this texture when responding to the "draw"
     # event...
-    canvas = Clutter.CairoTexture(SIZE_WIDTH, SIZE_HEIGHT)
+    canvas = Clutter.CairoTexture.new(SIZE_WIDTH, SIZE_HEIGHT)
     
     canvas.add_constraint(constraint)
     canvas.set_auto_resize(True)
